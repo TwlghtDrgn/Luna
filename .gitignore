@@ -104,4 +104,4 @@ dist
 .tern-port
 
 # Ignore bot config
-config.js
+config.json
