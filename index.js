@@ -8,7 +8,6 @@ const fetch = require('node-fetch');
 const si = require('systeminformation');
 const settings = { method: 'Get' };
 const ecoURL = 'https://ci.twilightdev.ru/job/Eco-GriefDefender/api/json';
-const chat = require('./modules/chat');
 
 // Logger
 
@@ -49,6 +48,7 @@ const client = new Client({ intents: [
 ] });
 
 client.commands = new Collection();
+
 const commandsPath = path.join(__dirname, 'commands');
 // const eventsPath = path.join(__dirname, 'events');
 
@@ -74,6 +74,7 @@ for (const file of commandFiles) {
 client.on('messageCreate', async msg => {
     if (msg.author.bot) return;
     if (!(/луна|лулу|луняш|лу, ?/giu.test(msg.content))) return;
+    logger.info(`${msg.author.tag} sent a message to me: ${msg.content}`);
 
     try {
         if (msg.content.includes('eco')) {
@@ -84,9 +85,9 @@ client.on('messageCreate', async msg => {
                 });
             return;
         } else {
-            // msg.content = msg.content.replace(/луна|лулу|луняш|лу, ?/giu, '');
-            // await wait(Math.floor(Math.random() * 60) * 1000);
-            // await client.chat.handleTalk(msg);
+            await wait(Math.floor(Math.random() * 5) * 1000);
+            await msg.channel.sendTyping();
+            await wait(Math.floor(Math.random() * 3) * 1000);
             msg.reply('<:luluShrug:711862558826692660>');
         }
     } catch (error) {
@@ -150,12 +151,6 @@ const noAccessEmbed = new EmbedBuilder()
     .setThumbnail('https://cdn.discordapp.com/attachments/962656409898602537/1001951656650481854/403.png');
 
 // So... Logger stuff goes here, I guess...
-
-client.on('messageCreate', async (message) => {
-    if (message.author.bot) return;
-    if (!(/луна|лулу|луняш|лу, ?/giu.test(message.content))) return;
-    logger.info(`${message.author.tag} sent a message to me: ${message.content}`);
-});
 
 client.on('interactionCreate', async (interaction) => {
     logger.info(`User "${interaction.user.tag}" at guild "${interaction.guild.name}" in channel "#${interaction.channel.name}" triggered a command: ${interaction}`);

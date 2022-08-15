@@ -15,9 +15,8 @@ const urlOptions = {
 };
 
 const handleTalk = async (msg, logger) => {
-    msg.content = msg.content.replace(/^<@!?[0-9]{1,20}> ?/i, '');
+    // msg.content = msg.content.replace(/^<@!?[0-9]{1,20}> ?/i, '');
     if (msg.content.length < 2) return;
-    msg.channel.sendTyping();
     urlOptions.uid = msg.author.id;
     urlOptions.msg = msg.content;
     mainURL.search = new URLSearchParams(urlOptions).toString();
@@ -35,7 +34,7 @@ const handleTalk = async (msg, logger) => {
             });
         }
     } catch (e) {
-        logger.error(e.stack);
+        logger.error(e);
     }
 };
 
