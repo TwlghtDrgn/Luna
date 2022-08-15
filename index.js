@@ -90,8 +90,6 @@ client.on('interactionCreate', async interaction => {
         await interaction.deferReply();
         await wait(1000);
         await command.execute(interaction, client);
-        await wait(30000);
-        await interaction.deleteReply();
     } catch (error) {
         await wait(1000);
         console.error(`!! > ${error}`);
