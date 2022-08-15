@@ -1,19 +1,21 @@
 /* eslint-disable no-unused-vars */
 const fs = require('node:fs');
+const os = require('node:os');
 const path = require('node:path');
 const wait = require('node:timers/promises').setTimeout;
-const { Client, GatewayIntentBits, Collection, EmbedBuilder, ActivityType } = require('discord.js');
+const { Client, GatewayIntentBits, Collection, EmbedBuilder, ActivityType, version } = require('discord.js');
 const { token, ver } = require('./config.json');
 const fetch = require('node-fetch');
 const si = require('systeminformation');
+const ascii = require('ascii-text-generator');
 const settings = { method: 'Get' };
-const ecoURL = 'https://ci.twilightdev.ru/job/Eco-GriefDefender/api/json';
+const radio = 'https://radio.twilightdev.ru/api/nowplaying/1';
+const eco = 'https://ci.twilightdev.ru/job/Eco-GriefDefender/api/json';
 
 // Logger
 
 const { createLogger, format, transports } = require('winston');
 const { combine, timestamp, simple } = format;
-// const messageCreate = require('./events/messageCreate');
 
 const logger = createLogger({
     transports: [
@@ -50,10 +52,8 @@ const client = new Client({ intents: [
 client.commands = new Collection();
 
 const commandsPath = path.join(__dirname, 'commands');
-// const eventsPath = path.join(__dirname, 'events');
 
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-// const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
@@ -61,15 +61,6 @@ for (const file of commandFiles) {
     client.commands.set(command.data.name, command);
 }
 
-// for (const file of eventFiles) {
-//     const filePath = path.join(eventsPath, file);
-//     const event = require(filePath);
-//     if (event.once) {
-//         client.once(event.name, (...args) => event.execute(...args));
-//     } else {
-//         client.on(event.name, (...args) => event.execute(...args));
-//     }
-// }
 
 client.on('messageCreate', async msg => {
     if (msg.author.bot) return;
@@ -78,17 +69,35 @@ client.on('messageCreate', async msg => {
 
     try {
         if (msg.content.includes('eco')) {
-            await fetch(ecoURL, settings)
+            await fetch(eco, settings)
                 .then(res => res.json())
                 .then((json) => {
                     msg.reply(`Последний успешный билд Eco: ${json.lastSuccessfulBuild.url}`);
                 });
             return;
+        } else if (/предыдущий|предыдущим|до этого ?/giu.test(msg.content)) {
+            await fetch(radio, settings)
+                .then(res => res.json())
+                .then((json) => {
+                    msg.reply(`Предыдущий трек: \`${json.song_history[0].song.text}\``);
+                });
+            return;
+        } else if (/далее|дальше|следующим ?/giu.test(msg.content)) {
+            await fetch(radio, settings)
+                .then(res => res.json())
+                .then((json) => {
+                    msg.reply(`Следующий трек: \`${json.playing_next.song.text}\``);
+                });
+            return;
+        } else if (/о себе|о тебе ?/giu.test(msg.content)) {
+            await msg.reply(`\`\`\`fix\nЯ - Луна.\nИграю радио, двигаю луну, когда в настроении то чатюсь с людьми, брожу по снам и все такое.\nМоя версия ${ver}, а версия API: ${version}.\nТакже, я нахожусь в ${client.guilds.cache.size} гильдиях и знаю около ${client.users.cache.size} пользователей.\nЕсли хочешь узнать информацию о системе, напиши \`Луна, статус\`\n\`\`\``);
+        } else if (/статус|сводка|статы ?/giu.test(msg.content)) {
+            await msg.reply(`\`\`\`md\n${await ascii('Luna', '2')}\n\n<Version ${ver}>\t<Discord.JS ${version}>\t<Bot_Uptime ${Math.floor(process.uptime())} seconds>\t<System_Uptime ${os.uptime()} seconds>\n<CPU ${(await si.cpu()).brand}>\n<RAM ${(await si.mem()).total / 1024 / 1024 / 1024} GB>\n<Temp: ${(await si.cpuTemperature()).main}>\n<OS ${(await si.osInfo()).distro}>\n<Kernel ${(await si.osInfo()).kernel}>\n\`\`\``);
         } else {
             await wait(Math.floor(Math.random() * 5) * 1000);
             await msg.channel.sendTyping();
             await wait(Math.floor(Math.random() * 3) * 1000);
-            msg.reply('<:luluShrug:711862558826692660>');
+            msg.reply('Известных команд не найдено <:luluShrug:711862558826692660>');
         }
     } catch (error) {
         await wait(1000);

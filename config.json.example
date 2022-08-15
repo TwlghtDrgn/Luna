@@ -1,14 +1,14 @@
 {
-    "ver": 0.76,
+    "ver": 0.8,
     "token": "BOT_TOKEN" ,
     "chat": {
         "url": "http://api.brainshop.ai/get",
         "brainID": "BrainID",
-        "key": "Token",
+        "key": "API_Key",
         "channel": ""
     },
-    "guildID": "Id_Of_The_Guild",
-    "stageID": "Id_Of_The_Stage",
+    "guildID": "",
+    "stageID": "",
 
-    "clientId": "BOT_ID"
+    "clientId": "BOT_USER_ID"
 }
