@@ -75,14 +75,14 @@ client.on('messageCreate', async msg => {
                     msg.reply(`Последний успешный билд Eco: ${json.lastSuccessfulBuild.url}`);
                 });
             return;
-        } else if (/предыдущий|предыдущим|до этого ?/giu.test(msg.content)) {
+        } else if (/предыдущий|предыдущим|до этого|прошлый ?/giu.test(msg.content)) {
             await fetch(radio, settings)
                 .then(res => res.json())
                 .then((json) => {
                     msg.reply(`Предыдущий трек: \`${json.song_history[0].song.text}\``);
                 });
             return;
-        } else if (/далее|дальше|следующим ?/giu.test(msg.content)) {
+        } else if (/далее|дальше|следующим|следующий ?/giu.test(msg.content)) {
             await fetch(radio, settings)
                 .then(res => res.json())
                 .then((json) => {
