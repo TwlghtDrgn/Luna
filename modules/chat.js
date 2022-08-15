@@ -14,7 +14,7 @@ const urlOptions = {
     msg: null,
 };
 
-const handleTalk = async (msg) => {
+const handleTalk = async (msg, logger) => {
     msg.content = msg.content.replace(/^<@!?[0-9]{1,20}> ?/i, '');
     if (msg.content.length < 2) return;
     msg.channel.sendTyping();
@@ -35,7 +35,7 @@ const handleTalk = async (msg) => {
             });
         }
     } catch (e) {
-        console.log(e.stack);
+        logger.error(e.stack);
     }
 };
 

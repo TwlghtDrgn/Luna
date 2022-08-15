@@ -8,7 +8,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('radio')
         .setDescription('It says everything in its name'),
-    async execute(interaction, client) {
+    async execute(interaction, client, logger) {
         const doneEmbed = new EmbedBuilder()
             .setColor('Green')
             .setTitle('Done')
@@ -48,11 +48,11 @@ module.exports = {
         const player = createAudioPlayer();
 
         player.on(AudioPlayerStatus.Playing, () => {
-            console.log('[Radio] > The audio player has started playing!');
+            logger.info('[Radio] > The audio player has started playing!');
         });
 
         player.on('error', error => {
-            console.error(`!! [Radio] > Error: ${error.message} with resource`);
+            logger.error(`!! [Radio] > Error: ${error.message} with resource`);
         });
 
         // create audio source
@@ -77,11 +77,11 @@ module.exports = {
         try {
             await voiceChannel.guild.stageInstances.fetch(stageID, { cache: true });
             await wait(2000);
-            console.log('[Radio] > Stage found, using old one...');
+            logger.info('[Radio] > Stage found, using old one...');
         } catch (e) {
             if ((e.toString()).indexOf('Unknown Stage Instance') > 0) {
                 voiceChannel.createStageInstance({ topic: 'Radio', privacyLevel: 2 });
-            } else { console.log(e); }
+            } else { logger.error(e); }
         }
 
         await wait(1000);
@@ -100,7 +100,7 @@ module.exports = {
             while (repeater) {
                 // Sanity fixer
                 if (voiceChannel.guild.members.me.voice.suppress) {
-                    console.log('[Radio] > Someone moved me to listeners. Fixing it...');
+                    logger.info('[Radio] > Someone moved me to listeners. Fixing it...');
                     voiceChannel.guild.members.me.voice.setSuppressed(false);
                     await wait(2000);
                 } else {
@@ -119,7 +119,7 @@ module.exports = {
             }
         } catch (e) {
             await interaction.editReply({ embeds: [errorEmbed] });
-            console.error(`!! [Radio] > ${e}`);
+            logger.error(`!! [Radio] > ${e}`);
             await wait(1000);
             repeater = false;
             if (subscription) {
