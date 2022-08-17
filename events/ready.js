@@ -1,0 +1,13 @@
+const { ActivityType } = require('discord.js');
+
+module.exports = {
+    name: 'ready',
+    once: true,
+    execute(client, logger) {
+        logger.info('--------');
+        logger.info(`[Luna] > Logged in as ${client.user.tag}`);
+        client.user.setStatus('idle');
+        client.user.setActivity('with your dreams', { type: ActivityType.Playing });
+        logger.info('[Luna] > Successfully awake!');
+    },
+};

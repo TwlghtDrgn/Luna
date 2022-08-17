@@ -1,5 +1,5 @@
 {
-    "ver": 0.8,
+    "ver": "0.77.1",
     "token": "BOT_TOKEN" ,
     "chat": {
         "url": "http://api.brainshop.ai/get",

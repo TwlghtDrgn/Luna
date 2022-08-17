@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 const { AudioPlayerStatus, joinVoiceChannel, createAudioPlayer, createAudioResource } = require('@discordjs/voice');
 const { stageID, guildID } = require('../config.json');
 const fetch = require('node-fetch');
@@ -8,31 +8,10 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('radio')
         .setDescription('It says everything in its name'),
-    async execute(interaction, client, logger) {
-        const doneEmbed = new EmbedBuilder()
-            .setColor('Green')
-            .setTitle('Done')
-            .setDescription('Команда выполнена успешно')
-            .setThumbnail('https://derpicdn.net/img/view/2014/11/23/770308.png')
-            .setTimestamp();
-
-        const errorEmbed = new EmbedBuilder()
-            .setColor('DarkVividPink')
-            .setTitle('Что то пошло не так...')
-            .setDescription('Судя по всему произошла ошибка: или у меня нет прав, или попалась ошибка в коде. Извини, и по возможности сообщи об этом <@339488218523238410>')
-            .setTimestamp()
-            .setThumbnail('https://cdn.discordapp.com/emojis/926033819675557949.webp?size=256&quality=lossless');
-
-        const noAccessEmbed = new EmbedBuilder()
-            .setColor('DarkVividPink')
-            .setTitle('Недостаточно прав')
-            .setDescription('Ты забрел на запретную территорию. Беги.')
-            .setTimestamp()
-            .setThumbnail('https://cdn.discordapp.com/attachments/962656409898602537/1001951656650481854/403.png');
-
+    async execute(interaction, client, logger, embed) {
         if (interaction.user.id != ('339488218523238410' || '251375740673720321')) {
             await wait(1000);
-            await interaction.editReply({ embeds: [noAccessEmbed] });
+            await interaction.editReply({ embeds: [embed.noAccessEmbed] });
             return;
         }
 
@@ -90,7 +69,7 @@ module.exports = {
             // play audio
             player.play(resource);
 
-            await interaction.editReply({ embeds: [doneEmbed] });
+            await interaction.editReply({ embeds: [embed.doneEmbed] });
 
             // set full access to Staged channel
             await voiceChannel.guild.members.me.voice.setSuppressed(false);
@@ -118,7 +97,7 @@ module.exports = {
                 }
             }
         } catch (e) {
-            await interaction.editReply({ embeds: [errorEmbed] });
+            await interaction.editReply({ embeds: [embed.errorEmbed] });
             logger.error(`!! [Radio] > ${e}`);
             await wait(1000);
             repeater = false;
