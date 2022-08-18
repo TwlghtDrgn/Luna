@@ -1,7 +1,7 @@
 const { InteractionType, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const bugreport = require('../commands/bugreport');
 const playerreport = require('../commands/playerreport');
-const { reportID, otherID } = require('../config.json');
+const { reportID } = require('../config.json');
 
 module.exports = {
     name: 'interactionCreate',
@@ -29,41 +29,35 @@ module.exports = {
             if (interaction.customId === 'bugReportModal') {
                 const title = interaction.fields.getTextInputValue('titleInput');
                 const nickname = interaction.fields.getTextInputValue('nicknameInput');
-                if (/креатив|выживание|бедварс|бед варс|лобби|ивент|creative|bw|bed wars|bedwars|survival|lobby|event ?/giu.test(title)) {
-                    const reportEmbed = new EmbedBuilder()
-                        .setFooter({ text: `${interaction.user.tag}`, iconURL: `${interaction.user.displayAvatarURL()}` })
-                        .setTitle(`Баг-репорт | Сервер: ${title} | Ник на сервере: ${nickname}`)
-                        .setDescription(`${description}`)
-                        .setTimestamp()
-                        .setColor('Blue');
+                const reportEmbed = new EmbedBuilder()
+                    .setFooter({ text: `${interaction.user.tag}`, iconURL: `${interaction.user.displayAvatarURL()}` })
+                    .setTitle(`Баг-репорт | Сервер: ${title} | Ник на сервере: ${nickname}`)
+                    .setDescription(`${description}`)
+                    .setTimestamp()
+                    .setColor('Blue');
 
-                    const points = new ActionRowBuilder()
-                        .addComponents(
-                            new ButtonBuilder()
-                                .setCustomId('reportPlus5')
-                                .setLabel('+5')
-                                .setStyle(ButtonStyle.Success),
-                        )
-                        .addComponents(
-                            new ButtonBuilder()
-                                .setCustomId('reportPlus15')
-                                .setLabel('+15')
-                                .setStyle(ButtonStyle.Success),
-                        )
-                        .addComponents(
-                            new ButtonBuilder()
-                                .setCustomId('reportPlus25')
-                                .setLabel('+25')
-                                .setStyle(ButtonStyle.Success),
-                        );
+                const points = new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('reportPlus5')
+                            .setLabel('+5')
+                            .setStyle(ButtonStyle.Success),
+                    )
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('reportPlus15')
+                            .setLabel('+15')
+                            .setStyle(ButtonStyle.Success),
+                    )
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('reportPlus25')
+                            .setLabel('+25')
+                            .setStyle(ButtonStyle.Success),
+                    );
 
-                    client.channels.cache.get(reportID).send({ embeds: [reportEmbed], components: [points] });
-                    interaction.reply({ content: 'Баг-репорт отправлен', ephemeral: true });
-                } else {
-                    client.channels.cache.get(otherID).send(`Ошибочная модалка от ${interaction.user.tag}, IGN: ${nickname} (${interaction.customId}): \`${title} - ${description}\``);
-                    interaction.reply({ content: 'Модалка отравлена не по адресу. Где-то допущена ошибка?', ephemeral: true });
-                }
-                return;
+                client.channels.cache.get(reportID).send({ embeds: [reportEmbed], components: [points] });
+                interaction.reply({ content: 'Баг-репорт отправлен', ephemeral: true });
             }
             if (interaction.customId === 'playerReportModal') {
                 const nickname = interaction.fields.getTextInputValue('nicknameInput');
