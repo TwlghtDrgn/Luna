@@ -6,6 +6,6 @@ module.exports = {
         .setDescription('Throw a dice'),
     async execute(interaction) {
         const d = Math.floor(Math.random() * 5) + 1;
-        await interaction.editReply(`🎲 ${d}`);
+        await interaction.reply(`🎲 ${d}`);
     },
 };

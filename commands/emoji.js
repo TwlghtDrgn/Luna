@@ -5,6 +5,6 @@ module.exports = {
         .setName('emoji')
         .setDescription('Send emoji that known to me'),
     async execute(interaction) {
-        await interaction.editReply('Still not implemented yet <:derpyShrug_1:711863356415541269>');
+        await interaction.reply('Still not implemented yet <:derpyShrug_1:711863356415541269>');
     },
 };

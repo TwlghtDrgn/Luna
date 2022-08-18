@@ -9,6 +9,9 @@ module.exports = {
         .setName('radio')
         .setDescription('It says everything in its name'),
     async execute(interaction, client, logger, embed) {
+        await interaction.deferReply();
+        await wait(1000);
+
         if (interaction.user.id != ('339488218523238410' || '251375740673720321')) {
             await wait(1000);
             await interaction.editReply({ embeds: [embed.noAccessEmbed] });

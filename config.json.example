@@ -1,5 +1,5 @@
 {
-    "ver": "0.77.1",
+    "ver": "0.77.2",
     "token": "BOT_TOKEN" ,
     "chat": {
         "url": "http://api.brainshop.ai/get",
@@ -9,6 +9,8 @@
     },
     "guildID": "",
     "stageID": "",
+    "reportID": "",
+    "otherID": "",
 
     "clientId": "BOT_USER_ID"
 }
