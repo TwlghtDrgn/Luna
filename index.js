@@ -105,22 +105,6 @@ client.on('messageCreate', async msg => {
             await msg.reply(`\`\`\`fix\nЯ - Луна.\nИграю радио, двигаю луну, когда в настроении то чатюсь с людьми, брожу по снам и все такое.\nМоя версия ${ver}, а версия API: ${version}.\nТакже, я нахожусь в ${client.guilds.cache.size} гильдиях и знаю около ${client.users.cache.size} пользователей.\nЕсли хочешь узнать информацию о системе, напиши \`Луна, статус\`\n\`\`\``);
         } else if (/статус|сводка|статы ?/giu.test(msg.content)) {
             await msg.reply(`\`\`\`md\n${await ascii('Luna', '2')}\n\n<Version ${ver}>\t<Discord.JS ${version}>\t<Bot_Uptime ${Math.floor(process.uptime())} seconds>\t<System_Uptime ${os.uptime()} seconds>\n<CPU ${(await si.cpu()).brand}>\n<RAM ${(await si.mem()).total / 1024 / 1024 / 1024} GB>\n<Temp: ${(await si.cpuTemperature()).main}>\n<OS ${(await si.osInfo()).distro}>\n<Kernel ${(await si.osInfo()).kernel}>\n\`\`\``);
-        } else if ((/создать репорты ?/giu.test(msg.content)) && (msg.author.id === '339488218523238410')) {
-            const reportsRow = new ActionRowBuilder()
-                .addComponents(
-                    new ButtonBuilder()
-                        .setCustomId('bugReportBtn')
-                        .setLabel('Отправить баг-репорт')
-                        .setStyle(ButtonStyle.Success),
-                )
-                .addComponents(
-                    new ButtonBuilder()
-                        .setCustomId('playerReportBtn')
-                        .setLabel('Отправить репорт на игрока')
-                        .setStyle(ButtonStyle.Danger),
-                );
-
-            await msg.channel.send({ embeds: [embed.notImplementedEmbed], components: [reportsRow] });
         }
     } catch (error) {
         await wait(1000);
