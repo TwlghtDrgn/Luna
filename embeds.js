@@ -33,6 +33,9 @@ const noAccessEmbed = new EmbedBuilder()
     .setTimestamp()
     .setThumbnail('https://cdn.discordapp.com/attachments/962656409898602537/1001951656650481854/403.png');
 
+const playingEmbed = new EmbedBuilder()
+    .setColor('#6a0dad')
+    .setTimestamp();
 
 module.exports = {
     notImplementedEmbed,
@@ -40,4 +43,5 @@ module.exports = {
     doneEmbed,
     errorEmbed,
     noAccessEmbed,
+    playingEmbed,
 };

@@ -90,9 +90,9 @@ module.exports = {
                     await fetch(url, settings)
                         .then(res => res.json())
                         .then((json) => {
-                            if (json.live.is_live) {
+                            if (json.live.is_live && (json.now_playing.song.text !== '')) {
                                 voiceChannel.guild.stageInstances.edit(stageID, { topic: `[LIVE] ${json.live.streamer_name}: ${json.now_playing.song.text}` });
-                            } else {
+                            } else if (json.now_playing.song.text !== '') {
                                 voiceChannel.guild.stageInstances.edit(stageID, { topic: `${json.now_playing.song.text}` });
                             }
                         });

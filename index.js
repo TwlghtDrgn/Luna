@@ -93,13 +93,22 @@ client.on('messageCreate', async msg => {
             await fetch(radio, settings)
                 .then(res => res.json())
                 .then((json) => {
-                    msg.reply(`Предыдущий трек: \`${json.song_history[0].song.text}\``);
+                    embed.playingEmbed.setTitle('Предыдущий трек').setDescription(`${json.song_history[0].song.text}`).setThumbnail(`${json.song_history[0].song.art}`);
+                    msg.reply({ embeds: [embed.playingEmbed] });
+                });
+        } else if (/сейчас|текущий ?/giu.test(msg.content)) {
+            await fetch(radio, settings)
+                .then(res => res.json())
+                .then((json) => {
+                    embed.playingEmbed.setTitle('Сейчас играет').setDescription(`${json.now_playing.song.text}`).setThumbnail(`${json.now_playing.song.art}`);
+                    msg.reply({ embeds: [embed.playingEmbed] });
                 });
         } else if (/далее|дальше|следующим|следующий ?/giu.test(msg.content)) {
             await fetch(radio, settings)
                 .then(res => res.json())
                 .then((json) => {
-                    msg.reply(`Следующий трек: \`${json.playing_next.song.text}\``);
+                    embed.playingEmbed.setTitle('Следующий трек').setDescription(`${json.playing_next.song.text}`).setThumbnail(`${json.playing_next.song.art}`);
+                    msg.reply({ embeds: [embed.playingEmbed] });
                 });
         } else if (/о себе|о тебе ?/giu.test(msg.content)) {
             await msg.reply(`\`\`\`fix\nЯ - Луна.\nИграю радио, двигаю луну, когда в настроении то чатюсь с людьми, брожу по снам и все такое.\nМоя версия ${ver}, а версия API: ${version}.\nТакже, я нахожусь в ${client.guilds.cache.size} гильдиях и знаю около ${client.users.cache.size} пользователей.\nЕсли хочешь узнать информацию о системе, напиши \`Луна, статус\`\n\`\`\``);
