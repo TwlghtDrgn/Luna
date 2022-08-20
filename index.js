@@ -89,21 +89,21 @@ client.on('messageCreate', async msg => {
                 .then((json) => {
                     msg.reply(`Последний успешный билд Eco: ${json.lastSuccessfulBuild.url}`);
                 });
-        } else if (/предыдущий|предыдущим|до этого|прошлый ?/giu.test(msg.content)) {
+        } else if (/предыдущий|предыдущим|до этого|прошлый|играл|ранее ?/giu.test(msg.content)) {
             await fetch(radio, settings)
                 .then(res => res.json())
                 .then((json) => {
                     embed.playingEmbed.setTitle('Предыдущий трек').setDescription(`${json.song_history[0].song.text}`).setThumbnail(`${json.song_history[0].song.art}`);
                     msg.reply({ embeds: [embed.playingEmbed] });
                 });
-        } else if (/сейчас|текущий ?/giu.test(msg.content)) {
+        } else if (/текущий|играет ?/giu.test(msg.content)) {
             await fetch(radio, settings)
                 .then(res => res.json())
                 .then((json) => {
                     embed.playingEmbed.setTitle('Сейчас играет').setDescription(`${json.now_playing.song.text}`).setThumbnail(`${json.now_playing.song.art}`);
                     msg.reply({ embeds: [embed.playingEmbed] });
                 });
-        } else if (/далее|дальше|следующим|следующий ?/giu.test(msg.content)) {
+        } else if (/далее|дальше|следующим|следующий|играть ?/giu.test(msg.content)) {
             await fetch(radio, settings)
                 .then(res => res.json())
                 .then((json) => {
