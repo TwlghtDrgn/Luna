@@ -9,14 +9,13 @@ module.exports = {
         .setName('radio')
         .setDescription('It says everything in its name'),
     async execute(interaction, client, logger, embed) {
-        await interaction.deferReply();
-        await wait(1000);
-
-        if (interaction.user.id != ('339488218523238410' || '251375740673720321')) {
-            await wait(1000);
-            await interaction.editReply({ embeds: [embed.noAccessEmbed] });
+        if (!interaction.guild.roles.cache.some(role => role.name === 'Staff Team' || 'Admins' || 'Admin')) {
+            await interaction.reply({ embeds: [embed.noAccessEmbed] });
             return;
         }
+
+        await interaction.deferReply();
+        await wait(1000);
 
         const url = 'https://radio.twilightdev.ru/api/nowplaying/1';
         const settings = { method: 'Get' };
@@ -75,14 +74,14 @@ module.exports = {
             await interaction.editReply({ embeds: [embed.doneEmbed] });
 
             // set full access to Staged channel
-            await voiceChannel.guild.members.me.voice.setSuppressed(false);
+            // await voiceChannel.guild.members.me.voice.setSuppressed(false);
 
-            await wait(2000);
+            await wait(1000);
 
             while (repeater) {
                 // Sanity fixer
                 if (voiceChannel.guild.members.me.voice.suppress) {
-                    logger.info('[Radio] > Someone moved me to listeners. Fixing it...');
+                    logger.info('[Radio] > Becoming a speaker');
                     voiceChannel.guild.members.me.voice.setSuppressed(false);
                     await wait(2000);
                 } else {
@@ -90,9 +89,13 @@ module.exports = {
                     await fetch(url, settings)
                         .then(res => res.json())
                         .then((json) => {
-                            if (json.live.is_live && (json.now_playing.song.text !== '')) {
+                            if (json.now_playing.song.text === null) {
+                                voiceChannel.guild.stageInstances.edit(stageID, { topic: 'No data' });
+                                return;
+                            }
+                            if (json.live.is_live) {
                                 voiceChannel.guild.stageInstances.edit(stageID, { topic: `[LIVE] ${json.live.streamer_name}: ${json.now_playing.song.text}` });
-                            } else if (json.now_playing.song.text !== '') {
+                            } else {
                                 voiceChannel.guild.stageInstances.edit(stageID, { topic: `${json.now_playing.song.text}` });
                             }
                         });
@@ -108,7 +111,6 @@ module.exports = {
                 // Unsubscribe after 5 seconds (stop playing audio on the voice connection)
                 setTimeout(() => subscription.unsubscribe(), 5_000);
             }
-            // voiceChannel.guild.stageInstance.delete(stageID);
             player.stop();
             connection.destroy();
         }

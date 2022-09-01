@@ -118,7 +118,6 @@ client.on('messageCreate', async msg => {
     } catch (error) {
         await wait(1000);
         logger.error(`!! > ${error}`);
-        msg.reply({ embeds: [embed.errorEmbed], ephemeral: true });
     }
 });
 
