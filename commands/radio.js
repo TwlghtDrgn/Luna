@@ -91,9 +91,7 @@ module.exports = {
                         .then((json) => {
                             if (json.now_playing.song.text === null) {
                                 voiceChannel.guild.stageInstances.edit(stageID, { topic: 'No data' });
-                                return;
-                            }
-                            if (json.live.is_live) {
+                            } else if (json.live.is_live) {
                                 voiceChannel.guild.stageInstances.edit(stageID, { topic: `[LIVE] ${json.live.streamer_name}: ${json.now_playing.song.text}` });
                             } else {
                                 voiceChannel.guild.stageInstances.edit(stageID, { topic: `${json.now_playing.song.text}` });
