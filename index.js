@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
-// Init stuff
+// Init modules
+const { token, ver } = require('./config.json');
 const fs = require('node:fs');
 const path = require('node:path');
 const wait = require('node:timers/promises').setTimeout;
@@ -8,12 +9,13 @@ const os = require('node:os');
 const ascii = require('ascii-text-generator');
 const settings = { method: 'Get' };
 const fetch = require('node-fetch');
+
+// Links
 const radio = 'https://radio.twilightdev.ru/api/nowplaying/1';
 const eco = 'https://ci.twilightdev.ru/job/Eco-GriefDefender/api/json';
 
 // Init DiscordJS
 const { Client, GatewayIntentBits, Collection, InteractionType, version, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { token, ver } = require('./config.json');
 const client = new Client({ intents: [
     GatewayIntentBits.DirectMessageReactions,
     GatewayIntentBits.DirectMessageTyping,
@@ -33,9 +35,10 @@ const client = new Client({ intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.MessageContent,
 ] });
+
 const embed = require('./embeds');
 
-// Logger
+// Init Logger
 const { createLogger, format, transports } = require('winston');
 const { combine, timestamp, simple } = format;
 
@@ -93,27 +96,27 @@ client.on('messageCreate', async msg => {
             await fetch(radio, settings)
                 .then(res => res.json())
                 .then((json) => {
-                    embed.playingEmbed.setTitle('Предыдущий трек').setDescription(`${json.song_history[0].song.text}`).setThumbnail(`${json.song_history[0].song.art}`);
-                    msg.reply({ embeds: [embed.playingEmbed] });
+                    embed.templateEmbed.setTitle('Предыдущий трек').setDescription(`${json.song_history[0].song.text}`).setThumbnail(`${json.song_history[0].song.art}`);
+                    msg.reply({ embeds: [embed.templateEmbed] });
                 });
         } else if (/текущий|играет ?/giu.test(msg.content)) {
             await fetch(radio, settings)
                 .then(res => res.json())
                 .then((json) => {
-                    embed.playingEmbed.setTitle('Сейчас играет').setDescription(`${json.now_playing.song.text}`).setThumbnail(`${json.now_playing.song.art}`);
-                    msg.reply({ embeds: [embed.playingEmbed] });
+                    embed.templateEmbed.setTitle('Сейчас играет').setDescription(`${json.now_playing.song.text}`).setThumbnail(`${json.now_playing.song.art}`);
+                    msg.reply({ embeds: [embed.templateEmbed] });
                 });
         } else if (/далее|дальше|следующим|следующий|играть ?/giu.test(msg.content)) {
             await fetch(radio, settings)
                 .then(res => res.json())
                 .then((json) => {
-                    embed.playingEmbed.setTitle('Следующий трек').setDescription(`${json.playing_next.song.text}`).setThumbnail(`${json.playing_next.song.art}`);
-                    msg.reply({ embeds: [embed.playingEmbed] });
+                    embed.templateEmbed.setTitle('Следующий трек').setDescription(`${json.playing_next.song.text}`).setThumbnail(`${json.playing_next.song.art}`);
+                    msg.reply({ embeds: [embed.templateEmbed] });
                 });
         } else if (/о себе|о тебе ?/giu.test(msg.content)) {
             await msg.reply(`\`\`\`fix\nЯ - Луна.\nИграю радио, двигаю луну, когда в настроении то чатюсь с людьми, брожу по снам и все такое.\nМоя версия ${ver}, а версия API: ${version}.\nТакже, я нахожусь в ${client.guilds.cache.size} гильдиях и знаю около ${client.users.cache.size} пользователей.\nЕсли хочешь узнать информацию о системе, напиши \`Луна, статус\`\n\`\`\``);
         } else if (/статус|сводка|статы ?/giu.test(msg.content)) {
-            await msg.reply(`\`\`\`md\n${await ascii('Luna', '2')}\n\n<Version ${ver}>\t<Discord.JS ${version}>\t<Bot_Uptime ${Math.floor(process.uptime())} seconds>\t<System_Uptime ${os.uptime()} seconds>\n<CPU ${(await si.cpu()).brand}>\n<RAM ${(await si.mem()).total / 1024 / 1024 / 1024} GB>\n<Temp: ${(await si.cpuTemperature()).main}>\n<OS ${(await si.osInfo()).distro}>\n<Kernel ${(await si.osInfo()).kernel}>\n\`\`\``);
+            await msg.reply(`\`\`\`md\n${await ascii('Luna', '2')}\n\n<Version ${ver}>\t<Discord.JS ${version}>\t<Bot_Uptime ${Math.floor(process.uptime())} seconds>\t<System_Uptime ${os.uptime()} seconds>\n<CPU ${(await si.cpu()).brand}>\n<RAM ${(await si.mem()).total / 1024 / 1024 / 1024} GB>\n<OS ${(await si.osInfo()).distro}>\n<Kernel ${(await si.osInfo()).kernel}>\n\`\`\``);
         }
     } catch (error) {
         await wait(1000);
@@ -125,7 +128,7 @@ client.on('messageCreate', async msg => {
 client.on('interactionCreate', async interaction => {
     if (!interaction.isChatInputCommand()) return;
     if (interaction.type === InteractionType.ModalSubmit) return;
-    logger.info(`User "${interaction.user.tag}" at guild "${interaction.guild.name}" in channel "#${interaction.channel.name}" triggered a command: ${interaction}`);
+    logger.info(`[${interaction.guild.name}] User "${interaction.user.tag}" triggered a command in a channel "#${interaction.channel.name}": ${interaction}`);
 
     const command = client.commands.get(interaction.commandName);
 

@@ -15,14 +15,14 @@ const happyBDayEmbed = new EmbedBuilder()
 const doneEmbed = new EmbedBuilder()
     .setColor('Green')
     .setTitle('Done')
-    .setDescription('Команда выполнена успешно')
-    .setThumbnail('https://derpicdn.net/img/view/2014/11/23/770308.png')
+    .setDescription('Задача выполнена 🙂')
+    // .setThumbnail('https://derpicdn.net/img/view/2014/11/23/770308.png')
     .setTimestamp();
 
 const errorEmbed = new EmbedBuilder()
     .setColor('DarkVividPink')
     .setTitle('Что то пошло не так...')
-    .setDescription('Судя по всему произошла ошибка: или у меня нет прав, или попалась ошибка в коде. Извини, и по возможности сообщи об этом <@339488218523238410>')
+    .setDescription('Судя по всему произошла ошибка: или у меня нет прав, или попалась ошибка в коде. Рекомендую сообщить об этом проишествии <@339488218523238410>')
     .setTimestamp()
     .setThumbnail('https://cdn.discordapp.com/emojis/926033819675557949.webp?size=256&quality=lossless');
 
@@ -33,7 +33,7 @@ const noAccessEmbed = new EmbedBuilder()
     .setTimestamp()
     .setThumbnail('https://cdn.discordapp.com/attachments/962656409898602537/1001951656650481854/403.png');
 
-const playingEmbed = new EmbedBuilder()
+const templateEmbed = new EmbedBuilder()
     .setColor('#6a0dad')
     .setTimestamp();
 
@@ -43,5 +43,5 @@ module.exports = {
     doneEmbed,
     errorEmbed,
     noAccessEmbed,
-    playingEmbed,
+    templateEmbed,
 };

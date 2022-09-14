@@ -99,11 +99,11 @@ module.exports = {
                                 voiceChannel.guild.stageInstances.edit(stageID, { topic: `${json.now_playing.song.text}` });
                             }
                         });
+                    if (!player.checkPlayable()) { throw new Error('Audio errored: no data from source '); }
                     await wait(20000);
                 }
             }
         } catch (e) {
-            await interaction.editReply({ embeds: [embed.errorEmbed] });
             logger.error(`!! [Radio] > ${e}`);
             await wait(1000);
             repeater = false;
@@ -113,6 +113,8 @@ module.exports = {
             }
             player.stop();
             connection.destroy();
+            // TODO: Make this work with >15 min replies
+            await interaction.editReply({ embeds: [embed.errorEmbed] });
         }
     },
 };
