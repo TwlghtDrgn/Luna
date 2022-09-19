@@ -69,9 +69,18 @@ module.exports = {
             await wait(2000);
             logger.info(`[${interaction.guild.name} | Radio] > Stage found, using old one...`);
         } catch (e) {
-            if ((e.toString()).indexOf('Unknown Stage Instance') > 0) {
-                voiceChannel.createStageInstance({ topic: 'Radio', privacyLevel: 2 });
-            } else { logger.error(e); }
+            try {
+                if ((e.toString()).indexOf('Unknown Stage Instance') > 0) {
+                    voiceChannel.createStageInstance({ topic: 'Radio', privacyLevel: 2 });
+                } else {
+                    logger.error(e);
+                    await interaction.editReply({ embeds: [embed.errorEmbed] });
+                    return;
+                }
+            } catch (err) {
+                logger.error(err);
+                await interaction.editReply({ embeds: [embed.errorEmbed] });
+            }
         }
 
         await wait(1000);
