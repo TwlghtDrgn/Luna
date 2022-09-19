@@ -103,7 +103,7 @@ module.exports = {
                                 voiceChannel.guild.stageInstances.edit(voiceChannelId, { topic: `${json.now_playing.song.text}` });
                             }
                         });
-                    if (!player.checkPlayable()) { throw new Error('Audio error: player stopped'); }
+                    if (!player.checkPlayable()) { throw new Error('Player stopped'); }
                     await wait(20000);
                 }
             }
@@ -122,7 +122,7 @@ module.exports = {
                 await interaction.editReply({ embeds: [embed.errorEmbed] });
             } catch (error) {
                 await client.users.fetch(interaction.user.id, false).then((user) => {
-                    user.send({ content: ['Вы получили это сообщение, так как с вашего аккаунта была выполнена команда `/radio` более 15 минут назад.'], embeds: [embed.errorEmbed] });
+                    user.send({ content: 'Вы получили это сообщение, так как команда `/radio` была выполнена Вами более 15 минут назад.', embeds: [embed.errorEmbed] });
                 });
             }
         }
