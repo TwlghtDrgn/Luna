@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { AudioPlayerStatus, joinVoiceChannel, createAudioPlayer, createAudioResource } = require('@discordjs/voice');
-const { stageID, guildID } = require('../config.json');
 const fetch = require('node-fetch');
 const wait = require('node:timers/promises').setTimeout;
 
@@ -21,19 +20,29 @@ module.exports = {
         const settings = { method: 'Get' };
 
         // get the voice channel ids
-        const voiceChannelId = stageID;
+        const voiceChannelId = interaction.member.voice.channelId;
         const voiceChannel = client.channels.cache.get(voiceChannelId);
-        const guildId = guildID;
+        const guildId = interaction.guild.id;
+
+        if (voiceChannelId === null) {
+            await interaction.editReply({ embeds: [embed.templateEmbed.setTitle('Ошибка').setDescription('Укажите Staged-канал для подключения (подключитесь к нему)').setColor('DarkVividPink')] });
+            return;
+        }
+
+        if (interaction.guild.channels.cache.get(voiceChannelId).type != 13) {
+            await interaction.editReply({ embeds: [embed.templateEmbed.setTitle('Ошибка').setDescription('Данный функционал доступен только в Staged-канале').setColor('DarkVividPink')] });
+            return;
+        }
 
         // create audio player
         const player = createAudioPlayer();
 
         player.on(AudioPlayerStatus.Playing, () => {
-            logger.info('[Radio] > The audio player has started playing!');
+            logger.info(`[${interaction.guild.name} | Radio] > The audio player has started playing!`);
         });
 
         player.on('error', error => {
-            logger.error(`!! [Radio] > Error: ${error.message} with resource`);
+            logger.error(`!! [${interaction.guild.name} | Radio] > Error: ${error.message} with resource`);
         });
 
         // create audio source
@@ -56,9 +65,9 @@ module.exports = {
         let repeater = true;
 
         try {
-            await voiceChannel.guild.stageInstances.fetch(stageID, { cache: true });
+            await voiceChannel.guild.stageInstances.fetch(voiceChannelId, { cache: true });
             await wait(2000);
-            logger.info('[Radio] > Stage found, using old one...');
+            logger.info(`[${interaction.guild.name} | Radio] > Stage found, using old one...`);
         } catch (e) {
             if ((e.toString()).indexOf('Unknown Stage Instance') > 0) {
                 voiceChannel.createStageInstance({ topic: 'Radio', privacyLevel: 2 });
@@ -73,15 +82,12 @@ module.exports = {
 
             await interaction.editReply({ embeds: [embed.doneEmbed] });
 
-            // set full access to Staged channel
-            // await voiceChannel.guild.members.me.voice.setSuppressed(false);
-
             await wait(1000);
 
             while (repeater) {
                 // Sanity fixer
                 if (voiceChannel.guild.members.me.voice.suppress) {
-                    logger.info('[Radio] > Becoming a speaker');
+                    logger.info(`[${interaction.guild.name} | Radio] > Becoming a speaker`);
                     voiceChannel.guild.members.me.voice.setSuppressed(false);
                     await wait(2000);
                 } else {
@@ -89,20 +95,20 @@ module.exports = {
                     await fetch(url, settings)
                         .then(res => res.json())
                         .then((json) => {
-                            if (json.now_playing.song.text === null) {
-                                voiceChannel.guild.stageInstances.edit(stageID, { topic: 'No data' });
+                            if (json.now_playing.song.text === '') {
+                                voiceChannel.guild.stageInstances.edit(voiceChannelId, { topic: 'No data' });
                             } else if (json.live.is_live) {
-                                voiceChannel.guild.stageInstances.edit(stageID, { topic: `[LIVE] ${json.live.streamer_name}: ${json.now_playing.song.text}` });
+                                voiceChannel.guild.stageInstances.edit(voiceChannelId, { topic: `[LIVE] ${json.live.streamer_name}: ${json.now_playing.song.text}` });
                             } else {
-                                voiceChannel.guild.stageInstances.edit(stageID, { topic: `${json.now_playing.song.text}` });
+                                voiceChannel.guild.stageInstances.edit(voiceChannelId, { topic: `${json.now_playing.song.text}` });
                             }
                         });
-                    if (!player.checkPlayable()) { throw new Error('Audio errored: no data from source '); }
+                    if (!player.checkPlayable()) { throw new Error('Audio error: player stopped'); }
                     await wait(20000);
                 }
             }
         } catch (e) {
-            logger.error(`!! [Radio] > ${e}`);
+            logger.error(`!! [${interaction.guild.name} | Radio] > ${e}`);
             await wait(1000);
             repeater = false;
             if (subscription) {
@@ -111,8 +117,14 @@ module.exports = {
             }
             player.stop();
             connection.destroy();
-            // TODO: Make this work with >15 min replies
-            await interaction.editReply({ embeds: [embed.errorEmbed] });
+            // Message about an error
+            try {
+                await interaction.editReply({ embeds: [embed.errorEmbed] });
+            } catch (error) {
+                await client.users.fetch(interaction.user.id, false).then((user) => {
+                    user.send({ content: ['Вы получили это сообщение, так как с вашего аккаунта была выполнена команда `/radio` более 15 минут назад.'], embeds: [embed.errorEmbed] });
+                });
+            }
         }
     },
 };
