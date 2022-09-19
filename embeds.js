@@ -22,7 +22,7 @@ const doneEmbed = new EmbedBuilder()
 const errorEmbed = new EmbedBuilder()
     .setColor('DarkVividPink')
     .setTitle('Что то пошло не так...')
-    .setDescription('Судя по всему произошла ошибка: или у меня нет прав, или попалась ошибка в коде. Рекомендую сообщить об этом проишествии <@339488218523238410>')
+    .setDescription('Судя по всему произошла непредвиденная ситуация: или у меня нет прав, или выпала внутренняя ошибка.\nЕсли считаешь что ошибка не с твоей стороны, рекомендую сообщить об этом <@339488218523238410>')
     .setTimestamp()
     .setThumbnail('https://cdn.discordapp.com/emojis/926033819675557949.webp?size=256&quality=lossless');
 
