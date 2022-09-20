@@ -1,6 +1,5 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const wait = require('node:timers/promises').setTimeout;
 const { Routes } = require('discord.js');
 const { REST } = require('@discordjs/rest');
 const { clientId, token } = require('./config.json');
@@ -21,8 +20,6 @@ const rest = new REST({ version: '10' }).setToken(token);
 rest.put(Routes.applicationCommands(clientId), { body: [] })
     .then(() => console.log('Deleted old commands'))
     .catch(console.error);
-
-wait(10000);
 
 rest.put(Routes.applicationCommands(clientId), { body: commands })
     .then(() => console.log('Uploaded new commands'))
