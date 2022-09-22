@@ -15,7 +15,7 @@ const happyBDayEmbed = new EmbedBuilder()
 const doneEmbed = new EmbedBuilder()
     .setColor('Green')
     .setTitle('Done')
-    .setDescription('Задача выполнена 🙂')
+    .setDescription('Команда выполнена успешно')
     // .setThumbnail('https://derpicdn.net/img/view/2014/11/23/770308.png')
     .setTimestamp();
 

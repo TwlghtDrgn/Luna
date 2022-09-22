@@ -83,7 +83,7 @@ for (const file of eventFiles) {
 // Message replier
 client.on('messageCreate', async msg => {
     if (msg.author.bot) return;
-    if (!(/луна|лулу|луняш|лу, ?/giu.test(msg.content))) return;
+    if (!(/луна|лулу|луняш ?/giu.test(msg.content))) return;
 
     try {
         if (msg.content.includes('eco')) {

@@ -62,8 +62,6 @@ module.exports = {
 
         await wait(2000);
 
-        let repeater = true;
-
         try {
             await voiceChannel.guild.stageInstances.fetch(voiceChannelId, { cache: true });
             await wait(2000);
@@ -93,7 +91,8 @@ module.exports = {
 
             await wait(1000);
 
-            while (repeater) {
+            // eslint-disable-next-line no-constant-condition
+            while (true) {
                 // Sanity fixer
                 if (voiceChannel.guild.members.me.voice.suppress) {
                     logger.info(`[${interaction.guild.name} | Radio] > Becoming a speaker`);
@@ -118,14 +117,13 @@ module.exports = {
             }
         } catch (e) {
             logger.error(`!! [${interaction.guild.name} | Radio] > ${e}`);
-            await wait(1000);
-            repeater = false;
             if (subscription) {
                 // Unsubscribe after 5 seconds (stop playing audio on the voice connection)
                 setTimeout(() => subscription.unsubscribe(), 5_000);
             }
             player.stop();
             connection.destroy();
+            await wait(1000);
             // Message about an error
             try {
                 await interaction.editReply({ embeds: [embed.errorEmbed] });
