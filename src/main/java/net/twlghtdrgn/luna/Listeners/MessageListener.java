@@ -14,9 +14,12 @@ public class MessageListener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
+        if (event.getAuthor().isBot()) return;
+
         String msg = event.getMessage().getContentDisplay().toLowerCase();
         if (!(msg.contains("луна") || msg.contains("лулу"))) return;
         msg = msg.replace("луна","").replace("лулу","").replace(",","").replace("  ",", ");
+
         String user = event.getAuthor().getAsTag();
         luna.getLogger().info("[" + event.getGuild().getName() + "|" + event.getChannel().getName() + "] " + user + " написал сообщение " + msg);
 
