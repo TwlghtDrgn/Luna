@@ -6,7 +6,7 @@
 
     <groupId>net.twlghtdrgn.luna</groupId>
     <artifactId>Luna</artifactId>
-    <version>0.8.02</version>
+    <version>0.8.1</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -46,6 +46,17 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.2.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
