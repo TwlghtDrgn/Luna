@@ -1,10 +1,8 @@
 # Exclude project folders
-/.tmp.driveupload
-/target
-/lib
 /.idea
+/lib
+/artifacts
 
 # Exclude files from the main folder
-Luna-*.jar
 .env
-/Luna-Rewrite.iml
+Luna-Rewrite.iml
