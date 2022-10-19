@@ -2,9 +2,9 @@
 /.tmp.driveupload
 /target
 /lib
+/.idea
 
 # Exclude files from the main folder
 Luna-*.jar
 .env
-/.idea
 /Luna-Rewrite.iml
