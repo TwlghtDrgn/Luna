@@ -13,6 +13,7 @@ public class DiceCommand extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
+        if (!event.isFromGuild()) return;
         if (!event.getName().equals("dice")) return;
 
         int draw = (int) Math.floor(Math.random() * 6) + 1;

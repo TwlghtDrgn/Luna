@@ -13,6 +13,7 @@ public class EmojiCommand extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
+        if (!event.isFromGuild()) return;
         if (!event.getName().equals("emoji")) return;
         String twlght = "null", puff = "null", fs = "null", val = "null";
 
