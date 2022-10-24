@@ -1,14 +1,11 @@
 package net.twlghtdrgn.luna.Commands.Media;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.StageInstance;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
-import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.StageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -30,13 +27,21 @@ public class RadioCommand extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
+        if (!event.isFromGuild()) return;
         if (!event.getName().equals("radio")) return;
         Guild guild = event.getGuild();
         Member member = event.getMember();
 
-//        if (event.getGuild().getAudioManager().isConnected()) {
-//            event.getGuild().getAudioManager().closeAudioConnection();
-//        }
+        if (!event.getOption("enabled").getAsBoolean()) {
+            if (guild.getAudioManager().getConnectedChannel() != null) {
+                StageChannel stage = guild.getAudioManager().getConnectedChannel().asStageChannel();
+                stage.getStageInstance().delete().queue();
+                guild.getAudioManager().closeAudioConnection();
+                event.replyEmbeds(embeds.setEmbed("Радио","Вещание успешно приостановлено!",0x00FF00)).setEphemeral(true).queue();
+            } else event.replyEmbeds(radioEmbed("Невозможно приостановить вещание - оно не запущено")).setEphemeral(true).queue();
+            return;
+        }
+
         if (!member.getVoiceState().inAudioChannel()) {
             event.replyEmbeds(radioEmbed("Укажите Staged-канал для подключения (подключитесь к нему)")).setEphemeral(true).queue();
             return;
@@ -47,22 +52,36 @@ public class RadioCommand extends ListenerAdapter {
             return;
         }
 
+        if (event.getGuild().getAudioManager().isConnected()) {
+            event.getGuild().getAudioManager().closeAudioConnection();
+        }
+
         event.deferReply().setEphemeral(true).queue();
-//        AudioManager manager = guild.getAudioManager();
-//        VoiceChannel stage = member.getVoiceState().getChannel().asVoiceChannel();
-//
-//        AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
-//        AudioSourceManagers.registerRemoteSources(playerManager);
-//
-//        AudioPlayer player = playerManager.createPlayer();
+
+        StageChannel stage = member.getVoiceState().getChannel().asStageChannel();
+        AudioManager manager = guild.getAudioManager();
+        StageInstance stageInstance = stage.getStageInstance();
+
+        if (stage.getStageInstance() == null) {
+            stage.createStageInstance("Radio")
+                    .setPrivacyLevel(StageInstance.PrivacyLevel.GUILD_ONLY).queue();
+        }
 
         event.getHook().editOriginalEmbeds(embeds.notImplementedEmbed()).queue();
 
+//        try {
+////            manager.setSendingHandler();
+//            manager.openAudioConnection(stage);
+//            event.getHook().editOriginalEmbeds(embeds.doneEmbed()).queue();
+//        } catch (Exception e) {
+//            luna.getLogger().error(e.toString());
+//            if (event.getHook().isExpired()) {
+//                luna.getLogger().warn("Something happened with Radio module, but the hook is expired");
+//                event.getJDA().getUserById(member.getId()).openPrivateChannel().flatMap(channel -> channel.sendMessageEmbeds(embeds.errorEmbed()));
+//            } else event.getHook().editOriginalEmbeds(embeds.errorEmbed()).queue();
+//        }
 
-        if (event.getHook().isExpired()) {
-            luna.getLogger().warn("Something happened with Radio module, but the hook is expired");
-            event.getJDA().getUserById(member.getId()).openPrivateChannel().flatMap(channel -> channel.sendMessageEmbeds(embeds.errorEmbed()));
-        }
+
     }
 
 }
