@@ -34,9 +34,7 @@ public class RadioCommand extends ListenerAdapter {
 
         if (!event.getOption("enabled").getAsBoolean()) {
             if (guild.getAudioManager().getConnectedChannel() != null) {
-                StageChannel stage = guild.getAudioManager().getConnectedChannel().asStageChannel();
-                stage.getStageInstance().delete().queue();
-                guild.getAudioManager().closeAudioConnection();
+                destroyConnection(guild);
                 event.replyEmbeds(embeds.setEmbed("Радио","Вещание успешно приостановлено!",0x00FF00)).setEphemeral(true).queue();
             } else event.replyEmbeds(radioEmbed("Невозможно приостановить вещание - оно не запущено")).setEphemeral(true).queue();
             return;
@@ -75,6 +73,7 @@ public class RadioCommand extends ListenerAdapter {
 //            event.getHook().editOriginalEmbeds(embeds.doneEmbed()).queue();
 //        } catch (Exception e) {
 //            luna.getLogger().error(e.toString());
+//            destroyConnection(guild);
 //            if (event.getHook().isExpired()) {
 //                luna.getLogger().warn("Something happened with Radio module, but the hook is expired");
 //                event.getJDA().getUserById(member.getId()).openPrivateChannel().flatMap(channel -> channel.sendMessageEmbeds(embeds.errorEmbed()));
@@ -82,6 +81,16 @@ public class RadioCommand extends ListenerAdapter {
 //        }
 
 
+    }
+
+    private void destroyConnection(Guild guild) {
+        try {
+            StageChannel stage = guild.getAudioManager().getConnectedChannel().asStageChannel();
+            stage.getStageInstance().delete().queue();
+            guild.getAudioManager().closeAudioConnection();
+        } catch (Exception e) {
+            luna.getLogger().error(e.toString());
+        }
     }
 
 }
