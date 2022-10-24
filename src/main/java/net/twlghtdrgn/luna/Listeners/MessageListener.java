@@ -3,7 +3,7 @@ package net.twlghtdrgn.luna.Listeners;
 import net.twlghtdrgn.luna.Luna;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.twlghtdrgn.luna.Messages.MessageResponse;
+import net.twlghtdrgn.luna.Messages.BrainShopResponse;
 
 public class MessageListener extends ListenerAdapter {
     private final Luna luna;
@@ -26,7 +26,7 @@ public class MessageListener extends ListenerAdapter {
         String user = event.getAuthor().getAsTag();
         luna.getLogger().info("[" + event.getGuild().getName() + "|" + event.getChannel().getName() + "] " + user + " написал сообщение " + msg);
 
-        MessageResponse messageResponse = new MessageResponse(luna);
+        BrainShopResponse messageResponse = new BrainShopResponse(luna);
         String resp = String.valueOf(messageResponse.lunaAPI(event.getAuthor().getId(),msg));
 
         try {
