@@ -14,10 +14,11 @@ public class EmojiCommand extends ListenerAdapter {
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         if (!event.getName().equals("emoji")) return;
-        String twlght = "null", puff = "null", val = "null";
+        String twlght = "null", puff = "null", fs = "null", val = "null";
 
         if (event.getOption("twlghtdrgn") != null) twlght = event.getOption("twlghtdrgn").getAsString();
         if (event.getOption("puffers") != null) puff = event.getOption("puffers").getAsString();
+        if (event.getOption("fs") != null) fs = event.getOption("fs").getAsString();
 
         if (!twlght.equals("null")) {
             switch (twlght) {
@@ -41,6 +42,14 @@ public class EmojiCommand extends ListenerAdapter {
         if (!puff.equals("null")) {
             switch (puff) {
                 case ("emoji_buldiga") -> val = "<:pwBuldiga:630872804505681931>";
+            }
+            event.reply(val).queue();
+            return;
+        }
+
+        if (!fs.equals("null")) {
+            switch (fs) {
+                case ("emoji_ismile") -> val = "<:FSigrolev:1033084051751452702>";
             }
             event.reply(val).queue();
             return;
