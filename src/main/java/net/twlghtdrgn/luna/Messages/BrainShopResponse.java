@@ -46,7 +46,6 @@ public class BrainShopResponse {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class message {
-        private String uid;
         private String cnt;
     }
 }
