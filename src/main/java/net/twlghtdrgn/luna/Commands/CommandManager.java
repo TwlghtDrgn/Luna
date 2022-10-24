@@ -30,10 +30,12 @@ public class CommandManager extends ListenerAdapter {
     @Override
     public void onReady(ReadyEvent event) {
         List<CommandData> commandData = new ArrayList<>();
-        commandData.add(Commands.slash("radio","Starts a radio in your Staged channel. Currently broken."));
+        commandData.add(Commands.slash("radio","Starts a radio in your Staged channel. Currently broken.")
+                .addOption(OptionType.BOOLEAN,"enabled","Starts or stops a radio", true));
         commandData.add(Commands.slash("dice","Draw a number from 1 to 6"));
         commandData.add(Commands.slash("slap","Slap someone (inspired by Cadyr, https://udj.at/cadyr)")
-                .addOption(OptionType.USER, "user","Person who you want to slap", true));
+                .addOption(OptionType.USER, "user","Person who you want to slap", true)
+                .addOption(OptionType.BOOLEAN,"ismega","Is this a MegaSlap (5x ping)?", false));
         commandData.add(Commands.slash("emoji","Send emoji known to me")
                 .addOptions(
                     new OptionData(OptionType.STRING,"twlghtdrgn","TwlghtDrgn's emojis",false)
@@ -50,7 +52,9 @@ public class CommandManager extends ListenerAdapter {
                             .addChoice("UltraHD 4K","emoji_uhd")
                             .addChoice("Dead Chat","emoji_deadchat"),
                     new OptionData(OptionType.STRING,"puffers","PuffersWorld emojis",false)
-                            .addChoice("Boulder", "emoji_buldiga")
+                            .addChoice("Boulder", "emoji_buldiga"),
+                    new OptionData(OptionType.STRING,"fs","FishSticks emojis",false)
+                            .addChoice("Igrolev's Smile", "emoji_ismile")
                 )
         );
         event.getJDA().updateCommands().addCommands(commandData).queue();
