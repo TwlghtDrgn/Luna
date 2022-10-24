@@ -65,22 +65,20 @@ public class RadioCommand extends ListenerAdapter {
                     .setPrivacyLevel(StageInstance.PrivacyLevel.GUILD_ONLY).queue();
         }
 
-        event.getHook().editOriginalEmbeds(embeds.notImplementedEmbed()).queue();
+//        event.getHook().editOriginalEmbeds(embeds.notImplementedEmbed()).queue();
 
-//        try {
-////            manager.setSendingHandler();
-//            manager.openAudioConnection(stage);
-//            event.getHook().editOriginalEmbeds(embeds.doneEmbed()).queue();
-//        } catch (Exception e) {
-//            luna.getLogger().error(e.toString());
-//            destroyConnection(guild);
-//            if (event.getHook().isExpired()) {
-//                luna.getLogger().warn("Something happened with Radio module, but the hook is expired");
-//                event.getJDA().getUserById(member.getId()).openPrivateChannel().flatMap(channel -> channel.sendMessageEmbeds(embeds.errorEmbed()));
-//            } else event.getHook().editOriginalEmbeds(embeds.errorEmbed()).queue();
-//        }
-
-
+        try {
+//            manager.setSendingHandler();
+            manager.openAudioConnection(stage);
+            event.getHook().editOriginalEmbeds(embeds.doneEmbed()).queue();
+        } catch (Exception e) {
+            luna.getLogger().error(e.toString());
+            destroyConnection(guild);
+            if (event.getHook().isExpired()) {
+                luna.getLogger().warn("Something happened with Radio module, but the hook is expired");
+                event.getJDA().getUserById(member.getId()).openPrivateChannel().flatMap(channel -> channel.sendMessageEmbeds(embeds.errorEmbed()));
+            } else event.getHook().editOriginalEmbeds(embeds.errorEmbed()).queue();
+        }
     }
 
     private void destroyConnection(Guild guild) {
