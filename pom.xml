@@ -74,7 +74,6 @@
                         <configuration>
                             <minimizeJar>true</minimizeJar>
                             <outputDirectory>${pom.basedir}/artifacts</outputDirectory>
-<!--                            <shadedArtifactId>${project.artifactId}-${project.version}</shadedArtifactId>-->
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <shadedClassifierName>all</shadedClassifierName>
                             <transformers>
