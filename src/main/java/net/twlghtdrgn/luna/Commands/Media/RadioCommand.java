@@ -20,6 +20,7 @@ import net.twlghtdrgn.luna.Utils.JSONParser;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class RadioCommand extends ListenerAdapter {
     private final Luna luna;
@@ -86,21 +87,24 @@ public class RadioCommand extends ListenerAdapter {
                     stage.requestToSpeak().complete();
                     StageInstance stageInstance = stage.getStageInstance();
                     while (manager.isConnected()) {
-                        updateTitle(stageInstance);
-                        Thread.sleep(20000);
+                        if (stage.getStageInstance() != null) {
+                            updateTitle(stageInstance);
+                        }
+                        TimeUnit.MILLISECONDS.sleep(20000);
                     }
                 } catch (InterruptedException e) {
                     throw new RuntimeException("Uncaught exception:", e);
                 }
             });
 
+            updateData.setPriority(6);
             updateData.start();
         } catch (Exception e) {
             luna.getLogger().error(e.toString());
             destroyConnection(guild);
             if (event.getHook().isExpired()) {
                 luna.getLogger().warn("Something happened with Radio module, but the hook is expired");
-                event.getJDA().getUserById(member.getId()).openPrivateChannel().flatMap(channel -> channel.sendMessageEmbeds(embeds.errorEmbed()));
+                event.getJDA().getUserById(member.getId()).openPrivateChannel().flatMap(channel -> channel.sendMessageEmbeds(embeds.errorEmbed())).queue();
             } else event.getHook().editOriginalEmbeds(embeds.errorEmbed()).queue();
         }
     }
@@ -108,7 +112,9 @@ public class RadioCommand extends ListenerAdapter {
     private void destroyConnection(Guild guild) {
         try {
             StageChannel stage = guild.getAudioManager().getConnectedChannel().asStageChannel();
-            stage.getStageInstance().delete().queue();
+            if (stage.getStageInstance() != null) {
+                stage.getStageInstance().delete().queue();
+            }
             guild.getAudioManager().closeAudioConnection();
         } catch (Exception e) {
             luna.getLogger().error(e.toString());
@@ -123,7 +129,7 @@ public class RadioCommand extends ListenerAdapter {
             if (data.get(0).length() > 2) title = data.get(0) + " - " + data.get(1);
                 else title = data.get(1);
 
-            if (!(stage.getTopic().length() > 1) && !stage.getGuild().getAudioManager().isConnected()) return;
+            if (!(stage.getTopic().length() > 1) | !stage.getGuild().getAudioManager().isConnected()) return;
 
             if (data.get(2).equals("true")) manager.setTopic("\uD83D\uDD34 " + data.get(3) + ": " + title).queue();
                 else manager.setTopic(title).queue();
