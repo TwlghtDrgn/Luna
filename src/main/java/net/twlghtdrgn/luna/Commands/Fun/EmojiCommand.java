@@ -50,7 +50,7 @@ public class EmojiCommand extends ListenerAdapter {
 
         if (!fs.equals("null")) {
             switch (fs) {
-                case ("emoji_ismile") -> val = "<:FSigrolev:1033084051751452702>";
+                case ("emoji_igrosmile") -> val = "<:FSigrolev:1033084051751452702>";
             }
             event.reply(val).queue();
             return;

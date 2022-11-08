@@ -30,7 +30,7 @@ public class CommandManager extends ListenerAdapter {
     @Override
     public void onReady(ReadyEvent event) {
         List<CommandData> commandData = new ArrayList<>();
-        commandData.add(Commands.slash("radio","Starts a radio in your Staged channel. Currently broken.")
+        commandData.add(Commands.slash("radio","Starts a radio in your Staged channel")
                 .addOption(OptionType.BOOLEAN,"enabled","Starts or stops a radio", true));
         commandData.add(Commands.slash("dice","Draw a number from 1 to 6"));
         commandData.add(Commands.slash("slap","Slap someone (inspired by Cadyr, https://udj.at/cadyr)")
@@ -54,7 +54,7 @@ public class CommandManager extends ListenerAdapter {
                     new OptionData(OptionType.STRING,"puffers","PuffersWorld emojis",false)
                             .addChoice("Boulder", "emoji_buldiga"),
                     new OptionData(OptionType.STRING,"fs","FishSticks emojis",false)
-                            .addChoice("Igrolev's Smile", "emoji_ismile")
+                            .addChoice("Igrolev's Smile", "emoji_igrosmile")
                 )
         );
         event.getJDA().updateCommands().addCommands(commandData).queue();
