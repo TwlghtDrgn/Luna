@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.twlghtdrgn.luna.Commands.CommandManager;
+import net.twlghtdrgn.luna.Listeners.AudioEventListener;
 import net.twlghtdrgn.luna.Listeners.EventListener;
 import net.twlghtdrgn.luna.Listeners.MessageListener;
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ public class Luna {
         shardManager.addEventListener(new MessageListener(this));
         shardManager.addEventListener(new CommandManager(this));
         shardManager.addEventListener(new EventListener(this));
+        new AudioEventListener(this);
     }
 
     /**
