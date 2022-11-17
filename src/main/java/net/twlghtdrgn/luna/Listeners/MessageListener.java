@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.twlghtdrgn.luna.Messages.BrainShopResponse;
 
+@SuppressWarnings("ConstantConditions")
 public class MessageListener extends ListenerAdapter {
     private final Luna luna;
     public MessageListener(Luna luna) {
@@ -38,7 +39,7 @@ public class MessageListener extends ListenerAdapter {
                                     "Это сообщение не пришло бы, если бы какой-то гений не запретил мне писать в чате.\n" +
                                     "Так что держи сообщение об ошибке в ЛС:\n"
                                     + resp)
-                    );
+                    ).queue();
         }
     }
 }

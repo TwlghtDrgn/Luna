@@ -22,6 +22,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+@SuppressWarnings("ConstantConditions")
 public class RadioCommand extends ListenerAdapter {
     private final Luna luna;
     Embeds embeds = new Embeds();

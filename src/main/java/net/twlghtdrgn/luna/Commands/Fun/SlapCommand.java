@@ -7,6 +7,7 @@ import net.twlghtdrgn.luna.Luna;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+@SuppressWarnings("ConstantConditions")
 public class SlapCommand extends ListenerAdapter {
     private final Luna luna;
 
@@ -20,7 +21,7 @@ public class SlapCommand extends ListenerAdapter {
         if (!event.getName().equals("slap")) return;
         String pinger = event.getUser().getAsMention();
         String pinged = event.getOption("user").getAsUser().getAsMention();
-        Boolean isMegaSlap = false;
+        boolean isMegaSlap = false;
 
         if (event.getOption("ismega") != null) isMegaSlap = event.getOption("ismega").getAsBoolean();
 
@@ -32,13 +33,11 @@ public class SlapCommand extends ListenerAdapter {
         if (isMegaSlap) {
             event.reply("Executed MegaSlap").setEphemeral(true).queue();
             int i = 0;
-            String msg = "";
-            while (i <= 5){
+            while (i <= 3){
                 int rand = (int) Math.floor(Math.random() * resp.size());
-                msg += resp.get(rand)+"\n";
+                event.getChannel().asTextChannel().sendMessage(resp.get(rand).replace("%s", pinger).replace("%r", pinged)).queue();
                 i++;
             }
-            event.getChannel().asTextChannel().sendMessage(msg.replace("%s", pinger).replace("%r", pinged)).queue();
         } else {
             int rand = (int) Math.floor(Math.random() * resp.size());
             event.reply(resp.get(rand).replace("%s", pinger).replace("%r", pinged)).queue();
@@ -46,38 +45,32 @@ public class SlapCommand extends ListenerAdapter {
     }
 
     public ArrayList<String> normalResponses() {
-        ArrayList<String> resp = new ArrayList<>(Arrays.asList(
-                "%s заорал вслед %r 'КУПИ СЛОНА!!!111'",
-                "%s взял кирпич и швырнул его в %r",
-                "%s устал ждать прибытия %r и пришел к нему во двор",
-                "%s старается поймать %r за хвост",
-                "%s потерял брелок, который ему подарил %r",
-                "%r пытается убежать от %s",
+        return new ArrayList<>(Arrays.asList(
+                "%s напомнил %r про давнее обещание",
+                "%s устал ждать %r и пришел к нему во двор",
                 "%s пошел искать %r",
-                "%s выкрикнул имя %r",
                 "%s не дождался %r и пошел к нему домой",
                 "%s стучится в дверь квартиры %r, ожидая ответа",
-                "%s пришел в комнату к %r, тихонько включил компьютер и начал играть в Minecraft с читами. Стоп, что?!",
-                "%s напомнил %r про давнее обещание",
                 "%s швырнул тапком в %r",
+                "%s пришел в комнату к %r, тихонько включил компьютер и начал играть в доту.",
+                "%s подкрался сзади и резко крикнул %r на ухо какую-то неразборчивую хрень",
                 "%s кинул вонючие носки в сумку к %r и убежал, ехидно хихикая",
                 "%s пытается разбудить %r в три часа ночи",
                 "Злой и сонный %r угрожая тапком несется за %s по улице, ибо нефиг будить посреди ночи",
-                "%s подкрался сзади и резко крикнул %r на ухо какую-то неразборчивую хрень"
+                "%r пытается убежать от %s",
+                "%s старается поймать %r за хвост",
+                "%s взял кирпич и швырнул его в %r",
+                "%s крикнул вслед %r 'КУПИ СЛОНА!!!111'"
         ));
-
-        return resp;
     }
 
     public ArrayList<String> easterEggResponses() {
-        ArrayList<String> resp = new ArrayList<>(Arrays.asList(
+        return new ArrayList<>(Arrays.asList(
                 "%r теперь гонится за %s, так как этот гений подкрался к ней сзади и напугал её",
-                "Знаете, я испытываю ну оочень сильное желание сослать %s на Солнце. Просто по приколу =)",
+                "Знаете, я испытываю ну оочень сильное желание сослать %s на Солнце. Просто по приколу :smile:",
                 "%r продала компьютер %s за его назойливость",
                 "%r подозревает %s в том, что он использует какие-то вещи ну оооочень не по назначению",
                 "\\**звуки начала боя покемонов*\\*\n%r - 99999hp \t%s - 852hp"
         ));
-
-        return resp;
     }
 }
