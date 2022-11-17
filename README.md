@@ -5,8 +5,8 @@ Luna is a bot, named after an alicorn princess from the 'My Little Pony'
 
 Luna has some commands, such as:
 - /dice - Throws a dice
-- /emoji - In theory, sends known to Luna emoji, but rn command is broken
+- /emoji - In theory, sends known to Luna emoji
 - /radio - Plays a radio station of mine in the Staged channels. Also displays now playing Artist-Title in the header of the server
-- /slap - A funny way to ping someone. Inspired by [Cadyr](https://udj.at/cadyr), a bot, written for Discord server 'PuffersWorld'
+- /slap - A funny way to ping someone. Inspired by [Cadyr](https://udj.at/cadyr), a bot, written by one of 'PuffersWorld' Discord server owners
 
-Also, in a near (I hope) future Luna will be able to respond on messages (again)
+Also, chat module now works again!
