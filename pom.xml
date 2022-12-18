@@ -6,7 +6,7 @@
 
     <groupId>net.twlghtdrgn.luna</groupId>
     <artifactId>Luna</artifactId>
-    <version>0.9.1</version>
+    <version>0.9.2-hotfix</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -40,7 +40,7 @@
         <dependency>
             <groupId>io.github.cdimascio</groupId>
             <artifactId>dotenv-java</artifactId>
-            <version>2.2.4</version>
+            <version>2.3.1</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -50,7 +50,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.13.4.2</version>
+            <version>2.14.0</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -58,16 +58,6 @@
             <version>1.18.24</version>
             <scope>compile</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.graalvm.js</groupId>-->
-<!--            <artifactId>js</artifactId>-->
-<!--            <version>22.2.0</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.graalvm.js</groupId>-->
-<!--            <artifactId>js-scriptengine</artifactId>-->
-<!--            <version>22.2.0</version>-->
-<!--        </dependency>-->
     </dependencies>
 
     <build>

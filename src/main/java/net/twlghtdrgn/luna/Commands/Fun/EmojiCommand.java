@@ -51,6 +51,10 @@ public class EmojiCommand extends ListenerAdapter {
         if (!fs.equals("null")) {
             switch (fs) {
                 case ("emoji_igrosmile") -> val = "<:FSigrolev:1033084051751452702>";
+                case ("emoji_hunterstare") -> val = "<:FSangry:1038474608237608970>";
+                case ("emoji_drog") -> val = "<:FSdrog:1040327306310340699>";
+                case ("emoji_moderator") -> val = "<:FSmoderator:1034129005726670909>";
+                case ("emoji_hunterscream") -> val = "<:FShunter:1012034949722947604>";
             }
             event.reply(val).queue();
             return;

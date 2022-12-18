@@ -1,5 +1,7 @@
 package net.twlghtdrgn.luna.Commands;
 
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -23,19 +25,22 @@ public class CommandManager extends ListenerAdapter {
 
         luna.getShardManager().addEventListener(new RadioCommand(this.luna));
         luna.getShardManager().addEventListener(new DiceCommand(this.luna));
-        luna.getShardManager().addEventListener(new SlapCommand(this.luna));
         luna.getShardManager().addEventListener(new EmojiCommand(this.luna));
+        luna.getShardManager().addEventListener(new SlapCommand(this.luna));
     }
 
     @Override
     public void onReady(ReadyEvent event) {
         List<CommandData> commandData = new ArrayList<>();
         commandData.add(Commands.slash("radio","Starts a radio in your Staged channel")
-                .addOption(OptionType.BOOLEAN,"enabled","Starts or stops a radio", true));
+                .addOption(OptionType.BOOLEAN,"enabled","Starts or stops a radio", true)
+                .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MESSAGE_MANAGE)));
         commandData.add(Commands.slash("dice","Draw a number from 1 to 6"));
         commandData.add(Commands.slash("slap","Slap someone (inspired by Cadyr, https://udj.at/cadyr)")
                 .addOption(OptionType.USER, "user","Person who you want to slap", true)
-                .addOption(OptionType.BOOLEAN,"ismega","Is this a MegaSlap (5x ping)?", false));
+                .addOption(OptionType.BOOLEAN,"ismega","Is this a MegaSlap (3x ping)?", false));
+
+        // Emoji command
         commandData.add(Commands.slash("emoji","Send emoji known to me")
                 .addOptions(
                     new OptionData(OptionType.STRING,"twlghtdrgn","TwlghtDrgn's emojis",false)
@@ -55,8 +60,13 @@ public class CommandManager extends ListenerAdapter {
                             .addChoice("Boulder", "emoji_buldiga"),
                     new OptionData(OptionType.STRING,"fs","FishSticks emojis",false)
                             .addChoice("Igrolev's Smile", "emoji_igrosmile")
+                            .addChoice("Hunter stares at you", "emoji_hunterstare")
+                            .addChoice("Dog + Frog = Drog", "emoji_drog")
+                            .addChoice("Moderator", "emoji_moderator")
+                            .addChoice("Hunter screams", "emoji_hunterscream")
                 )
         );
+
         event.getJDA().updateCommands().addCommands(commandData).queue();
         luna.getLogger().info("Commands updated successfully!");
     }

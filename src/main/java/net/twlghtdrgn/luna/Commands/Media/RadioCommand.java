@@ -57,7 +57,7 @@ public class RadioCommand extends ListenerAdapter {
             return;
         }
 
-        if (!member.getVoiceState().getChannel().asStageChannel().getType().equals(ChannelType.STAGE)) {
+        if (!member.getVoiceState().getChannel().getType().equals(ChannelType.STAGE)) {
             event.replyEmbeds(radioEmbed("Данный функционал доступен только в Staged-канале")).setEphemeral(true).queue();
             return;
         }
