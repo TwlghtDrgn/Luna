@@ -31,8 +31,8 @@ public class SlapCommand extends ListenerAdapter {
         } else resp = normalResponses();
 
         if (isMegaSlap) {
-            event.reply("Executed MegaSlap").setEphemeral(true).queue();
-            int i = 0;
+            event.reply("Результат ниже").setEphemeral(true).queue();
+            int i = 1;
             while (i <= 3){
                 int rand = (int) Math.floor(Math.random() * resp.size());
                 event.getChannel().asTextChannel().sendMessage(resp.get(rand).replace("%s", pinger).replace("%r", pinged)).queue();

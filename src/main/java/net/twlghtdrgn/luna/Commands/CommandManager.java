@@ -32,13 +32,13 @@ public class CommandManager extends ListenerAdapter {
     @Override
     public void onReady(ReadyEvent event) {
         List<CommandData> commandData = new ArrayList<>();
-        commandData.add(Commands.slash("radio","Starts a radio in your Staged channel")
-                .addOption(OptionType.BOOLEAN,"enabled","Starts or stops a radio", true)
+        commandData.add(Commands.slash("radio","Запустить модуль радио в Staged-канале")
+                .addOption(OptionType.BOOLEAN,"enabled","Включить или выключить", true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MESSAGE_MANAGE)));
-        commandData.add(Commands.slash("dice","Draw a number from 1 to 6"));
-        commandData.add(Commands.slash("slap","Slap someone (inspired by Cadyr, https://udj.at/cadyr)")
-                .addOption(OptionType.USER, "user","Person who you want to slap", true)
-                .addOption(OptionType.BOOLEAN,"ismega","Is this a MegaSlap (3x ping)?", false));
+        commandData.add(Commands.slash("dice","Рандомное число от 1 до 6"));
+        commandData.add(Commands.slash("slap","Шлепнуть (пингануть) кого-либо, (вдохновлено ботом Cadyr, https://udj.at/cadyr)")
+                .addOption(OptionType.USER, "user","Кого пинаем?", true)
+                .addOption(OptionType.BOOLEAN,"ismega","Мегашлепок? (пинг трижды)?", false));
 
         // Emoji command
         commandData.add(Commands.slash("emoji","Send emoji known to me")
